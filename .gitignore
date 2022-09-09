@@ -1,0 +1,6 @@
+frontend/dist
+frontend/node_modules
+backend/venv
+backend/test.py
+backend/app/static
+backend/app/.env

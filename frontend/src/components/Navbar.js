@@ -1,14 +1,8 @@
 import React from 'react'
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 function Navbar(props) {
-    const navigate = useNavigate()
-    const logout = () => {
-        props.setUser(null)
-        props.setDp(null)
-        localStorage.removeItem("token")
-        navigate('/login')
-    }
+
     return (
         <nav className="navbar navbar-expand-lg navbar-light bg-light">
             <div className="container-fluid">
@@ -22,9 +16,9 @@ function Navbar(props) {
                     <i className="fas fa-align-justify"></i>
                 </button>
 
-
                 <div className="collapse navbar-collapse justify-content-center" id="navbarSupportedContent">
                     <ul className="nav navbar-nav  " >
+
                         <li className="nav-item active">
                             <Link className="nav-link" to={"/"}>General</Link>
                         </li>
@@ -37,31 +31,6 @@ function Navbar(props) {
                         <li className="nav-item">
                             <Link className="nav-link" to={"/"}>business</Link>
                         </li>
-
-                        {
-                            props.user ?
-                                <>
-                                    
-                                    <li className="nav-item">
-                                        <button className="nav-link btn btn-danger rounded-4" onClick={logout}><i className="fa fa-power-off"></i>Logout</button>
-                                    </li>
-                                    
-                                </>
-                                :
-                                <>
-                                   
-                                        
-                                    <li className="nav-item active">
-                                        <Link className="nav-link" to={"/login"}>Login</Link>
-                                    </li>
-                                    <li className="nav-item">
-                                        <Link className="nav-link" to={"/register"}>Register</Link>
-                                    </li>
-                                        
-                                    
-                                </>
-
-                        }
                     </ul>
                 </div>
             </div>

@@ -1,4 +1,4 @@
-import React,{useState} from 'react'
+import React,{useState, useEffect} from 'react'
 import { useNavigate } from 'react-router-dom';
 
 function Createblog(props) {
@@ -46,7 +46,7 @@ function Createblog(props) {
       })
       .catch((err)=>{console.log(err)})
     }
-
+    useEffect(()=>{props.setReadMore(false)},[])
   return (
     <>
     <div className="container">

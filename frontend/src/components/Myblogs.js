@@ -65,6 +65,7 @@ useEffect(() => {
   } 
   FetchUserData();
 }, []);
+useEffect(()=>{props.setReadMore(false)},[])
   return (
     <>
     <div className="container">

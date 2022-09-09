@@ -208,6 +208,47 @@ a.article, a.article:hover {
 }
 
 
+
+
+/* ---------------------------------------------------
+    Blog view
+----------------------------------------------------- */
+.fullBlog{
+    text-align: center;
+}
+.fullBlog h1{
+    font-family:'Times New Roman', Times, serif;
+    letter-spacing: 2px;
+    text-shadow: 2px 1px;
+}
+.back-btn{
+    font-family:'Times New Roman', Times, serif;
+    margin-top: 50px;
+    
+  
+}
+.blog-h3{
+    margin-top: 2rem;
+    padding: 0 2rem;
+    font-family: "Georgia, 'Times New Roman', Times, serif";
+    
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    line-height: 1.37;
+    
+}
+
+.desktop{
+    display: block;
+    margin-top: 90px;
+    border-left: 3px solid rgb(197, 191, 191);
+    
+}
+.mobile{
+    display: none;
+}
+
+
 /* ---------------------------------------------------
     MEDIAQUERIES
 ----------------------------------------------------- */
@@ -239,5 +280,11 @@ a.article, a.article:hover {
     #sidebarCollapse.active span:last-of-type {
         transform: rotate(-45deg) translate(1px, -1px);
     }
-
+    .desktop{
+        display: none;
+    }
+    .mobile{
+        display: block;
+        border-bottom:2px dotted #555;
+    }
 }

@@ -1,3 +1,4 @@
+from email.policy import default
 import os
 import google.auth.credentials
 from google.cloud import ndb
@@ -15,6 +16,7 @@ client = ndb.Client(project="blog", credentials=credentials)
 
 
 # gcloud beta emulators datastore start --data-dir=. --project blog --host-port "127.0.0.1:8001
+# $env:DATASTORE_EMULATOR_HOST='localhost:8001';python .\venv\Scripts\datastore-viewer
 
 class Users(ndb.Model):
     uuid = ndb.StringProperty(required=True)
@@ -30,3 +32,7 @@ class Blog_Info(ndb.Model):
     date = ndb.StringProperty() 
     article_title = ndb.StringProperty(required=True)
     article_body = ndb.StringProperty(required=True)
+
+class Followers(ndb.Model):
+    following = ndb.StringProperty()
+    follower = ndb.StringProperty()

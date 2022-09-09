@@ -1,5 +1,5 @@
 from flask import request,jsonify,url_for
-from app.models import Users, Blog_Info,client
+from app.models import Users, Blog_Info,Followers,client
 from app import app,bcrypt
 from PIL import Image
 import os
@@ -59,6 +59,27 @@ def protected():
 
     return jsonify(message), 200
 
+@app.route('/getauthor',methods=['POST'])
+def get_author():
+    data = request.get_json()
+    with client.context():
+        user = Users.query(Users.username==data['username']).get()
+        if Followers.query(Followers.follower==data['follower'],Followers.following==data['username']).get() is not None:
+            message = {
+                "user":user.username,
+                "profile":user.profile_picture,
+                "email":user.email,
+                "following":True
+            }
+        
+            return jsonify(message)
+        message = {
+                "user":user.username,
+                "profile":user.profile_picture,
+                "email":user.email,
+                "following":False
+            }
+        return jsonify(message)
 
 @app.route('/registeration',methods=['POST'])
 def register():
@@ -190,3 +211,18 @@ def delete(id):
         deleted_blog['id'] = id
         blog.key.delete()
         return jsonify({"message":"Successfully Deleted","blog":deleted_blog})
+
+@app.route('/follow',methods=['PUT'])
+def follow():
+    data = request.get_json()
+    with client.context():
+        print(data)
+        isFollowing = Followers.query(Followers.follower==data['follower'],Followers.following==data['following']).get()
+        if isFollowing is not None:
+            isFollowing.key.delete()
+            return jsonify({"message":"unfollowed"})
+
+        follow_data = Followers(follower=data['follower'],following=data['following'])
+        follow_data.put()
+
+    return jsonify({"message":"following"})

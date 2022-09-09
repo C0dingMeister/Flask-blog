@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {useNavigate} from 'react-router-dom'
 
 function Login(props) {
@@ -85,7 +85,7 @@ function Login(props) {
             .catch((err) => { console.log(err) })
     }
 
-
+    useEffect(()=>{props.setReadMore(false)},[])
     return (
         <>
         

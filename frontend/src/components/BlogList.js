@@ -4,15 +4,20 @@ import Blog from './Blog'
 
 
 function BlogList(props) {
-
-    const [title, setTitle] = useState("")
-    const [body, setBody] = useState("")
-
-    
+    const [blog,setBlog] = useState({
+        title:"",
+        body:"",
+        author:"",
+        date:""
+    })
 
     const fullBlog = (user) => {
-        setTitle(user.article_title)
-        setBody(user.article_body)
+        setBlog({
+            title:user.article_title,
+            body:user.article_body,
+            author:user.username,
+            date:user.date,
+        })
         props.setReadMore(true)
     }
 
@@ -27,13 +32,13 @@ function BlogList(props) {
                 {
                     props.readMore  ?
                     <>
-                        <Blog title={title} body={body} setReadMore={props.setReadMore} />
+                        <Blog blog={blog} user={props.loggedUser} setReadMore={props.setReadMore} />
                     </>
                     :
                     <>
                         <h1 className='display-3' style={{ textAlign: "center", fontFamily: "serif" }}>Latest Blogs</h1>
                         <div className='blog-container row'>
-                            {props.data && props.data.reverse().map((user => {
+                            {props.data && props.data.map((user => {
                                 return <div key={user.id} className="my-3 blog-card col-lg-12 ">
 
                                     <div className="container border border-opacity-30 my-1">

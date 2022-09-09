@@ -69,7 +69,7 @@ function App() {
         }
         )
             .then((resp) => { 
-              setData(resp) 
+              setData(resp.reverse()) 
               setLoading(false)
             })
             .catch((err) => { console.log(err) })
@@ -110,17 +110,17 @@ function App() {
         <Navbar user={user} setUser={setUser} setDp={setDp}/>
       
       <Routes>
-        <Route path="/" element={< BlogList data={data}  readMore={readMore} setReadMore={setReadMore} loading={loading} />} />
+        <Route path="/" element={< BlogList data={data} loggedUser={user} readMore={readMore} setReadMore={setReadMore} loading={loading} />} />
 
-        <Route path="/login" element={token && token !== '' && token !== undefined && user ? <Navigate to={'/'} /> : < Login setUser={setUser} setDp={setDp} />} />
+        <Route path="/login" element={token && token !== '' && token !== undefined && user ? <Navigate to={'/'} /> : < Login setUser={setUser} setDp={setDp} setReadMore={setReadMore} />} />
 
-        <Route path="/register" element={token && token !== '' && token !== undefined && user ? <Navigate to={'/'} /> : < Register />} />
+        <Route path="/register" element={token && token !== '' && token !== undefined && user ? <Navigate to={'/'} /> : < Register setReadMore={setReadMore}/>} />
 
         <Route exact path='/my_blogs' element={token && token !== '' && token !== undefined && user ? <Myblogs user={user}
-          updateAfterEdit={updateAfterEdit} updateAfterDelete={updateAfterDelete} setUser={setUser} setDp={setDp}/> : <Navigate to={'/'} />} />
+          updateAfterEdit={updateAfterEdit} updateAfterDelete={updateAfterDelete} setUser={setUser} setDp={setDp} setReadMore={setReadMore}/> : <Navigate to={'/'} />} />
 
         <Route path='/create_blog' element={token && token !== '' && token !== undefined && user ? <Createblog user={user}
-          updatedData={updatedData}/> : <Navigate to={'/'} />} />
+          updatedData={updatedData} setReadMore={setReadMore}/> : <Navigate to={'/'} />} />
 
       </Routes>
       </div>

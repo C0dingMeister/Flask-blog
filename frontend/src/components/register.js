@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
+import React, { useState,useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
 
-function Register() {
+function Register(props) {
     const navigate = useNavigate();
     const [userName, setUserName] = useState("");
     const [email, setEmail] = useState("");
@@ -111,7 +111,8 @@ function Register() {
           
         
     }
-
+    
+    useEffect(()=>{props.setReadMore(false)},[])
     return (
         <>
             <div className="container form-container my-4">
