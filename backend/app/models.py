@@ -24,14 +24,16 @@ class Users(ndb.Model):
     username = ndb.StringProperty(required=True)
     email = ndb.StringProperty(required=True)
     password = ndb.StringProperty(required=True)
-    date = ndb.StringProperty()
+    about_me = ndb.StringProperty(default="Just an aspiring writer")
+    date = ndb.StringProperty() 
 
 
 class Blog_Info(ndb.Model):
     username = ndb.StringProperty(required=True)
     date = ndb.StringProperty() 
     article_title = ndb.StringProperty(required=True)
-    article_body = ndb.StringProperty(required=True)
+    article_body = ndb.TextProperty(required=True)
+    tag = ndb.StringProperty(default="Miscelleneous")
 
 class Followers(ndb.Model):
     following = ndb.StringProperty()
