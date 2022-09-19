@@ -1,7 +1,7 @@
 import React,{useState, useEffect} from 'react'
 import { useNavigate } from 'react-router-dom';
 
-function Createblog(props) {
+function Createblog({userLoggedIn}) {
   const navigate = useNavigate();
   const [title, setTitle] = useState("");
   const [body,setBody] = useState("");
@@ -17,7 +17,7 @@ function Createblog(props) {
 }
   const submitForm = ()=>{
       let data = {
-          user: props.user,
+          user: userLoggedIn,
           title: title,
           body: body,
       }
@@ -25,11 +25,11 @@ function Createblog(props) {
           method:"POST",
           headers:{
               'Content-Type': 'application/json',
-              "Authorization": "Bearer " + localStorage.getItem("token")
+              "Authorization": "Bearer " + localStorage.getItem("access_token")
           },
           body: JSON.stringify(data),
       }
-      console.log(title,body,props.user)
+      console.log(title,body,userLoggedIn)
       
       fetch("http://localhost:5000/post",options)
       .then((resp)=>{
@@ -39,14 +39,12 @@ function Createblog(props) {
       })
       .then((result)=>{
           // props.loggedUser(data.user)
-          props.updatedData(result.newBlog)
           console.log(result)
           navigate("/")
           
       })
       .catch((err)=>{console.log(err)})
     }
-    useEffect(()=>{props.setReadMore(false)},[])
   return (
     <>
     <div className="container">

@@ -48,9 +48,9 @@ module.exports = {
     },
     plugins: [
         new HtmlWebpackPlugin({
-            title: 'BlogHub',
+            title: 'MicroBlog',
             filename: 'index.html',
-            template: 'src/template.html'
+            template: 'src/template.html',
         }),
       
     ]

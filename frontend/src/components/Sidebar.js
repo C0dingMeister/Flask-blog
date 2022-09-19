@@ -1,8 +1,12 @@
-import React, { useState } from 'react'
-import { Link,useNavigate } from 'react-router-dom';
+import React,{useState} from 'react';
+
+import { Link, useNavigate } from 'react-router-dom';
+
 
 function Sidebar(props) {
   const [error, setError] = useState()
+  const [subscribe, setSubscribe] = useState()
+
   const handleClick = (e) => {
     const formData = new FormData();
     let input = document.querySelector('input[type="file"]')
@@ -38,13 +42,40 @@ function Sidebar(props) {
     e.target.value = null
   }
   const navigate = useNavigate()
+
   const logout = () => {
-      props.setUser(null)
-      props.setDp(null)
-      localStorage.removeItem("token")
-      navigate('/login')
+    props.setUser(null)
+    props.setDp(null)
+    localStorage.removeItem("access_token")
+    navigate('/login')
   }
 
+  const notification = async () => {
+    if (subscribe) {
+      navigator.serviceWorker.ready.then((reg) => {
+        reg.pushManager.getSubscription().then((subscription) => {
+          subscription.unsubscribe().then((successful) => {
+            console.log(successful)
+            setSubscribe(false)
+          }).catch((e) => {
+            // Unsubscribing failed
+          })
+        })
+      });
+    }
+    else {
+
+      const publicKey = "BIWiaQ4_PfE50maGN54-91QglRCyxlZaehIltGsvVyi1nWJndsfMAE7BExLOc_dodtrIpE9dIrybPbwGe2uxaAQ";
+      const reg = await navigator.serviceWorker.register("sw.js");
+      const sub = await reg.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: publicKey
+      });
+      console.log(JSON.stringify(sub))
+      setSubscribe(true)
+    }
+
+  }
   return (
     <>
       <nav id="sidebar">
@@ -82,9 +113,19 @@ function Sidebar(props) {
               <li>
                 <Link to={'/my_blogs'}>My Blogs</Link>
               </li>
+              <li>
+                <Link to={'/feed'}>My Feed</Link>
+              </li>
+              <li>
+                
+                <div className="form-check form-switch form-check my-2">
+                  <input className="form-check-input" onClick={notification} type="checkbox" id="flexSwitchCheckReverse" disabled={false}/>
+                  <label className="form-check-label" htmlFor="flexSwitchCheckReverse">Show notification</label>
+                </div>
+              </li>
 
               <li >
-                <button className="btn btn-danger" onClick={logout}><i className="fa fa-power-off"></i>  Logout</button>
+                <button className="btn btn-danger my-2" onClick={logout}><i className="fa fa-power-off"></i>  Logout</button>
               </li>
             </>
             :
@@ -103,7 +144,7 @@ function Sidebar(props) {
 
       </nav>
 
-
+      
     </>
   )
 }

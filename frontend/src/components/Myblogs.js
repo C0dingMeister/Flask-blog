@@ -37,14 +37,14 @@ useEffect(() => {
       await fetch("http://localhost:5000/myposts",{
         method:'POST',
          headers: {
-          "Authorization": "Bearer "+localStorage.getItem("token")
+          "Authorization": "Bearer "+localStorage.getItem("access_token")
                  },
           
           }).then(async (res) =>{
             
-          const userData = await res.json()
+            const userData = await res.json()
+            // console.log(data) 
           
-          // console.log(data) 
           return userData
       }
    )
@@ -52,7 +52,7 @@ useEffect(() => {
     if(resp.msg){
       props.setUser(null)
       props.setDp(null)
-      localStorage.removeItem("token")
+      localStorage.removeItem("access_token")
       navigate('/')
     }
     else{
@@ -65,6 +65,7 @@ useEffect(() => {
   } 
   FetchUserData();
 }, []);
+
 useEffect(()=>{props.setReadMore(false)},[])
   return (
     <>
