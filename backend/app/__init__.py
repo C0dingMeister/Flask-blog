@@ -11,7 +11,7 @@ load_dotenv()
 app = Flask(__name__)
 bcrypt = Bcrypt(app)
 app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY")
-app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(minutes=10)
+app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(minutes=30)
 app.config['SECRET_KEY'] = os.getenv("SECRET_KEY")
 app.config['PROPAGATE_EXCEPTION']=True
 app.config['VAPID_SUBJECT'] = os.getenv("VAPID_SUBJECT")
