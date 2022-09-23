@@ -1,18 +1,13 @@
 import React, { useState, useEffect } from 'react'
-import {
-  BrowserRouter,
-  Routes,
-  Route,
-  Navigate
-} from "react-router-dom";
+import {BrowserRouter,Routes,Route,Navigate} from "react-router-dom";
 import Createblog from './components/Createblog';
-import CreateBlogPage from './components/pages/CreateBlogPage';
 import FullPostPage from './components/pages/FullPostPage';
 import HomePage from './components/pages/HomePage'
 import LoginPage from './components/pages/LoginPage'
 import ProfilePage from './components/pages/ProfilePage';
 import RegisterationPage from './components/pages/RegistrationPage'
 import UserPage from './components/pages/UserPage';
+
 function App() {
   const [userLoggedIn, setUserLoggedIn] = useState(null);
   let token = localStorage.getItem("access_token");
@@ -22,7 +17,7 @@ function App() {
     if (token) {
 
       (async () => {
-        const response = await fetch('http://localhost:5000/api/getuser', {
+        const response = await fetch('/api/getuser', {
           headers: {
             "Authorization": "Bearer " + token
           }
@@ -34,6 +29,7 @@ function App() {
         else {
           setUserLoggedIn(null)
           localStorage.removeItem("access_token")
+          localStorage.removeItem("refresh_token")
         }
 
       }
@@ -52,7 +48,6 @@ function App() {
           <Route path='/profile/:username' element={<ProfilePage userLoggedIn={userLoggedIn} setUserLoggedIn={setUserLoggedIn}/>} />
           <Route path='/user' element={!userLoggedIn?<Navigate to={"/"}/>:<UserPage userLoggedIn={userLoggedIn} setUserLoggedIn={setUserLoggedIn}/>} />
           <Route path='/post/:id' element={<FullPostPage userLoggedIn={userLoggedIn} setUserLoggedIn={setUserLoggedIn}/>}/>
-          <Route path='/create' element={userLoggedIn ? <CreateBlogPage userLoggedIn={userLoggedIn} setUserLoggedIn={setUserLoggedIn}/>:<Navigate to={"/"}/>} />
         </Routes>
       </BrowserRouter>
     </>
