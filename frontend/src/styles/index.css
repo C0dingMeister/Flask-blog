@@ -89,7 +89,41 @@ body > div.fade.modal.show{
 }
 .brand-name{
     font-family: 'Montez', cursive;
-    font-size: xx-large;
+}
+
+.edit-button{
+    position: relative;
+}
+.edit-button .btn{
+    position: absolute;
+  bottom: 0%;
+  right: 40%;
+  font-size: small;
+  border: none;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.edit-button .btn:hover{
+    background-color: black;
+}
+
+.edit-about{
+    position: absolute;
+    font-size: small;
+    padding: 2px 2px;
+    margin-left: 3px;
+    border: none;
+}
+
+.post-header{
+    position: relative;
+}
+
+.editPost{
+    position: relative;
+    top: 5%;
+    left: 95%;
 }
 
 .createForm{
@@ -196,6 +230,18 @@ body > div.fade.modal.show{
 
 .carousel{
     font-size: larger;
+}
+
+.disabledbutton{
+    pointer-events: none;
+    opacity: 0.4;
+}
+
+.notifiaction-button{
+    cursor: pointer;
+    border-radius: 8px;
+    padding: 8px;
+    margin: 5px 5px;
 }
 
 .logout-button{
