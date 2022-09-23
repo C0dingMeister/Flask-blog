@@ -23,7 +23,7 @@ export default function RegisterationPage() {
                 email: emailField.current.value,
                 password: passwordField.current.value
             }
-            const response = await fetch("http://localhost:5000/api/registeration",{
+            const response = await fetch(window.location.origin+"/api/registeration",{
                 method: "POST",
                 headers:{
                     'Content-Type':'application/json'

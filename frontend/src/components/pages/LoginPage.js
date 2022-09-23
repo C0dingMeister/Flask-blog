@@ -33,7 +33,7 @@ export default function LoginPage({ setUserLoggedIn }) {
                 email: email,
                 password: password
             }
-            const response = await fetch("http://localhost:5000/api/login",{
+            const response = await fetch(window.location.origin+"/api/login",{
                 method:'POST',
                 headers:{
                     'Content-Type':'application/json'
@@ -50,7 +50,7 @@ export default function LoginPage({ setUserLoggedIn }) {
                 const result = await response.json();
                 localStorage.setItem("access_token",result.access_token)
                 localStorage.setItem("refresh_token",result.refresh_token)
-                setUserLoggedIn(true)
+                setUserLoggedIn(result.user)
                 navigate("/user")
             }
         }

@@ -12,11 +12,11 @@ export default function FullPostPage({ userLoggedIn, setUserLoggedIn }) {
    useEffect(() => {
       (async () => {
 
-         console.log(id)
-        let data = {
-         follower: userLoggedIn
+         // console.log(id)
+         let data = {
+            follower: userLoggedIn
          }
-         const response = await fetch(`http://localhost:5000/get/${id}`, {
+         const response = await fetch(`${window.location.origin}/get/${id}`, {
             method: "POST",
             headers: {
                "Content-Type": "application/json"
@@ -25,24 +25,31 @@ export default function FullPostPage({ userLoggedIn, setUserLoggedIn }) {
          })
          if (response.ok) {
             const result = await response.json()
-            
+
             setPost(result)
          }
-      
+
       })()
    }, [])
-
+   const readingTime = (post) => {
+      const wordsArray = post.split(" ")
+      const length = wordsArray.length
+      return Math.ceil(length / 200)
+   }
    return (
       <>
          {userLoggedIn ? <UserNavBar userLoggedIn={userLoggedIn} setUserLoggedIn={setUserLoggedIn} /> :
             <HomeNavBar />}
          <Container className="PostPageDiv">
             <Row>
-               <Col lg={9} className="AuthorTopBarCol">
-
-                  {post === undefined || post === null ? <Spinner animation="border" /> :
-                     <>
-                        <AuthorBar sidebar={false} username={post.username} date={post.date} tag={post.tag} picture={post.picture} following={post.following} userLoggedIn={userLoggedIn}/>
+               
+               {post.article_body === undefined || post.article_body === null ? <Spinner animation="border" /> :
+                  <>
+                     <Col lg={9} className="AuthorTopBarCol">
+                        <AuthorBar sidebar={false} username={post.username} date={post.date}
+                           readTime={readingTime(post.article_body) > 1 ? String(readingTime(post.article_body))+" mins read" : "1 min read"}
+                           tag={post.tag} picture={post.picture} following={post.following} 
+                           subscribed={post.subscribed} userLoggedIn={userLoggedIn} />
                         <div className="PostPageBody">
                            <h1 className="display-2">{post.article_title}</h1>
                            <hr />
@@ -54,14 +61,17 @@ export default function FullPostPage({ userLoggedIn, setUserLoggedIn }) {
                            <hr />
                         </div>
 
-                     </>
-                  }
-
-               </Col>
-               <Col lg={3} className="AuthorSideBarCol">
-                  <AuthorBar sidebar={true} username={post.username} date={post.date} tag={post.tag} picture={post.picture} following={post.following} userLoggedIn={userLoggedIn} />
-               </Col>
+                     </Col>
+                     <Col lg={3} className="AuthorSideBarCol">
+                        <AuthorBar sidebar={true} username={post.username} readTime={readingTime(post.article_body) > 1 ? String(readingTime(post.article_body))+" mins read" : "1 min read"}
+                           date={post.date} tag={post.tag} picture={post.picture}
+                           following={post.following} subscribed={post.subscriber} 
+                           userLoggedIn={userLoggedIn} />
+                     </Col>
+                  </>
+               }
             </Row>
+
          </Container>
       </>
    );

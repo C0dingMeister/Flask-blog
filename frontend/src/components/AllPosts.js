@@ -3,13 +3,16 @@ import { Spinner } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
 import Post from "./Post";
-export default function AllPosts({url,slice,username}) {
+export default function AllPosts({url,slice,username,edit}) {
     const [posts,setPosts] = useState();
     const navigate = useNavigate()
 
     useEffect(() => {
         (async ()=>{
-            console.log("on"+url)
+            if(url==='/api/latest'){
+
+                console.log("on "+url)
+            }
             
             let options = {};
             const headers = new Headers();
@@ -37,7 +40,7 @@ export default function AllPosts({url,slice,username}) {
             }
             
             
-            const response = await fetch("http://localhost:5000"+url,options);
+            const response = await fetch(window.location.origin+url,options);
              if (response.ok){
                 const result = await response.json();
                 const allPosts = result.reverse()
@@ -48,7 +51,9 @@ export default function AllPosts({url,slice,username}) {
                     setPosts(allPosts)
                 }
             }else{
-                setPosts(null);
+                setPosts(null)
+                localStorage.removeItem("access_token")
+                localStorage.removeItem("refresh_token")
                 navigate("/")
             }
             
@@ -63,7 +68,7 @@ export default function AllPosts({url,slice,username}) {
             
             { posts === undefined || posts ===null ? <Spinner animation="border"/>:
             <>
-            {posts.map(post=><Post post={post} key={post.id}/>)
+            {posts.map(post=><Post post={post} key={post.id} edit={edit}/>)
                 }
             </>}
             

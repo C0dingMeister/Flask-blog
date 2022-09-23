@@ -55,7 +55,7 @@ export default function HomeNavBar() {
         {show && <SigninPage show={show} setShow={setShow} page={page} />}
         <Navbar className='Header' fixed='top'>
             <Container>
-                <Navbar.Brand as={NavLink} to={"/"} className="brand-name"><img src='http://localhost:3000/logo(256x256).ico' height={"30px"} width={"30px"}/> Microblog</Navbar.Brand>
+                <Navbar.Brand as={NavLink} to={"/"} className="brand-name"><img src='/static/logo(256x256).ico' height={"30px"} width={"30px"}/> Microblog</Navbar.Brand>
                 <Navbar.Toggle />
                 <Navbar.Collapse className="justify-content-end">
                     <Button className='get-started-button NavBtn' variant='dark' name="register" onClick={(element) => handleShow(element)}>Get started</Button>
