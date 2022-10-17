@@ -1,4 +1,5 @@
 const path = require('path')
+const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 module.exports = {
@@ -7,7 +8,7 @@ module.exports = {
         main: path.resolve(__dirname,'src/index.js'),
     },
     output: {
-        path: path.resolve(__dirname,'dist'),
+        path: path.resolve(__dirname,'../backend/app/static/js'),
         filename: '[name].[contenthash].js',
         assetModuleFilename: '[name][ext]',
         clean: true,
@@ -52,6 +53,9 @@ module.exports = {
             filename: 'index.html',
             template: 'src/template.html',
         }),
+        new webpack.DefinePlugin({
+            "process.env.API_URL": JSON.stringify("http://localhost:5000")
+          })
       
     ]
 }
