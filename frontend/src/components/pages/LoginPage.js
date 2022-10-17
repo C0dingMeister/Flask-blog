@@ -1,18 +1,27 @@
-import React, { useEffect, useRef,useState } from "react";
-import { Form, Button,Container } from "react-bootstrap";
+import React, { useEffect, useRef,useState,useContext } from "react";
+import { Form, Button,Container, Spinner } from "react-bootstrap";
 import InputField from "../InputField";
-import { Link,useNavigate } from "react-router-dom";
+import { Link,useNavigate, useLocation } from "react-router-dom";
+import AuthContext from "../context/AuthContext";
+import { useFlash } from "../context/FlashProvider";
+import HomeNavBar from "../HomeNavBar";
 
-export default function LoginPage({ setUserLoggedIn }) {
+export default function LoginPage() {
     const [formErrors, setFormErrors] = useState({})
+    const [loading, setLoading] = useState(false)
     const emailField = useRef();
     const passwordField =useRef();
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+    const { setAuth, setIsAuthenticated } = useContext(AuthContext);
+    const flash = useFlash()
+    const location = useLocation();
+    const from = location.state?.from?.pathname || "/user";
     useEffect(() => {
         emailField.current.focus();
     },[]);
 
     const onSubmit = async (event) =>{
+        setLoading(true)
         event.preventDefault();
         const email = emailField.current.value;
         const password = passwordField.current.value;
@@ -33,11 +42,13 @@ export default function LoginPage({ setUserLoggedIn }) {
                 email: email,
                 password: password
             }
-            const response = await fetch(window.location.origin+"/api/login",{
+            const response = await fetch(process.env.API_URL+"/api/login_with_cookies",{
                 method:'POST',
                 headers:{
-                    'Content-Type':'application/json'
+                    'Content-Type': 'application/json',
                 },
+                credentials: 'include',
+                
                 body: JSON.stringify(data)
             })
 
@@ -48,34 +59,37 @@ export default function LoginPage({ setUserLoggedIn }) {
             else{
                 setFormErrors({})
                 const result = await response.json();
-                localStorage.setItem("access_token",result.access_token)
-                localStorage.setItem("refresh_token",result.refresh_token)
-                setUserLoggedIn(result.user)
-                navigate("/user")
+                setAuth(result.user)
+                setIsAuthenticated(true)
+                navigate(from, {replace: true})
+                flash("Logged in!","success")
             }
         }
+        setLoading(false)
     }
     return (
-       <>  
-        <Container className="Loginform">
-            <legend>Log in!</legend>
-            <hr />
-            <Form.Text className="text-danger">{formErrors.error}</Form.Text>
-                <Form onSubmit={onSubmit}>
-                    <InputField 
-                    name="email" label=" Email address"
-                    error={formErrors.email} fieldRef={emailField}/>
-                    <InputField 
-                    name="password" label="Password" type="password"  
-                    error={formErrors.password} fieldRef={passwordField}/>
-                    <Button variant="primary" type="submit">Login</Button>
-                </Form>
-            <hr />
-            <p>Don't have an account? <Link to={"/register"}>Register here</Link></p>
-        </Container>
-            
-            
-            
-        </>
+       <> 
+            {loading ? <Spinner className="center-page" animation="border"/>:
+                <>
+                    <HomeNavBar/>
+                    <Container className="Loginform">
+                        <legend>Log in!</legend>
+                        <hr />
+                        <Form.Text className="text-danger">{formErrors.error}</Form.Text>
+                            <Form onSubmit={onSubmit}>
+                                <InputField 
+                                name="email" label=" Email address"
+                                error={formErrors.email} fieldRef={emailField}/>
+                                <InputField 
+                                name="password" label="Password" type="password"  
+                                error={formErrors.password} fieldRef={passwordField}/>
+                                <Button variant="primary" type="submit">Login</Button>
+                            </Form>
+                        <hr />
+                        <p>Don't have an account? <Link to={"/register"}>Register here</Link></p>
+                    </Container>
+                </>
+            }
+       </>
     );
 }
