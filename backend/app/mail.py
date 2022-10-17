@@ -1,10 +1,13 @@
 from __future__ import print_function
 import sib_api_v3_sdk
 from sib_api_v3_sdk.rest import ApiException
+import os
 from pprint import pprint
+from dotenv import load_dotenv
+load_dotenv()
 
 configuration = sib_api_v3_sdk.Configuration()
-configuration.api_key['api-key'] = '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'
+configuration.api_key['api-key'] = os.getenv("MAIL_API")
 
 api_instance = sib_api_v3_sdk.TransactionalEmailsApi(sib_api_v3_sdk.ApiClient(configuration))
 
