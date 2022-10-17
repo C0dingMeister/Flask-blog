@@ -10,7 +10,7 @@ export default function LatestPost({ url }) {
     const navigate = useNavigate()
     useEffect(() => {
         (async () => {
-            const response = await fetch(window.location.origin + url, {
+            const response = await fetch(process.env.API_URL + url, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -39,7 +39,7 @@ export default function LatestPost({ url }) {
                 {latestPost.map(post => {
                     return (<Carousel.Item key={post.id}>
                         <Card className="carousel-cards">
-                            <Card.Img variant="top" src={window.location.origin+"/"+post.picture}  />
+                            <Card.Img variant="top" src={process.env.API_URL+"/"+post.picture}  />
                             <Card.Body>
                                 <Card.Title>{post.article_title.length > 50 ? post.article_title.slice(0, 50) + "..." : post.article_title}</Card.Title>
                                 <Card.Text>

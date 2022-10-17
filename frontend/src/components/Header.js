@@ -10,7 +10,7 @@ export default function Header() {
         <>
             <Container>
                 <HomeNavBar />
-                <Image className='mainImg' src='/static/ideas.jpg' />
+                <Image className='mainImg' src='ideas.jpg' />
             </Container>
         </>
     )

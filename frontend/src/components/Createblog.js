@@ -1,12 +1,16 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { useNavigate } from 'react-router-dom';
+import AuthContext, { getUser, getCookie } from './context/AuthContext';
+import { useFlash } from './context/FlashProvider';
 import UserNavBar from './UserNavBar';
 
-function Createblog({ userLoggedIn, setUserLoggedIn }) {
+function Createblog() {
   const navigate = useNavigate();
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
   const [tag,setTag] = useState()
+  const {auth, setAuth, setIsAuthenticated} = useContext(AuthContext)
+  const flash = useFlash()
   const handleChange = (e) => {
     const { id, value } = e.target;
     if (id === "title") {
@@ -20,40 +24,66 @@ function Createblog({ userLoggedIn, setUserLoggedIn }) {
     }
     
   }
-  const submitForm = () => {
-    let data = {
-      user: userLoggedIn,
-      title: title,
-      body: body,
-      tag:tag,
+  const submitForm = async() => {
+    const submitButton = document.getElementById('submit-post')
+    submitButton.setAttribute('disabled',true)
+    const user = await getUser()
+    if(user){
+      if(title.replace(/ /g,'').length < 3){
+        submitButton.removeAttribute('disabled')
+        flash("Title must be atleast 3 characters long")
+        return
+      }
+      if(body.replace(/ /g,'').length < 50){
+        submitButton.removeAttribute('disabled')
+        flash("Content body must be atleast 50 characters long")
+        return
+      }
+  
+      let data = {
+        user: auth,
+        title: title,
+        body: body,
+        tag:tag,
+      }
+      let options = {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-TOKEN': getCookie('csrf_access_token'),
+        },
+        credentials: 'include',
+        body: JSON.stringify(data),
+      }
+      
+  
+      fetch(process.env.API_URL+"/api/post", options)
+        .then((resp) => {
+          if (resp.status === 200) {
+            return resp.json()
+          }
+        })
+        .then((result) => {
+          // // props.loggedUser(data.user)
+          // console.log(result)
+          navigate("/user")
+  
+        })
+        .catch((err) => { console.log(err) })
+        submitButton.removeAttribute('disabled')
+        flash("Blog posted successfully!","success")
     }
-    let options = {
-      method: "POST",
-      headers: {
-        'Content-Type': 'application/json',
-        "Authorization": "Bearer " + localStorage.getItem("access_token")
-      },
-      body: JSON.stringify(data),
+    else{
+      
+      setAuth(null)
+      setIsAuthenticated(false)
+      navigate('/')
+      flash("Login Session Expired. You have to login again")
     }
-    
-
-    fetch(window.location.origin+"/api/post", options)
-      .then((resp) => {
-        if (resp.status === 200) {
-          return resp.json()
-        }
-      })
-      .then((result) => {
-        // // props.loggedUser(data.user)
-        // console.log(result)
-        navigate("/")
-
-      })
-      .catch((err) => { console.log(err) })
   }
   return (
     <>
-      <UserNavBar userLoggedIn={userLoggedIn} setUserLoggedIn={setUserLoggedIn} />
+      <UserNavBar />
       <div className="container">
         <h1 style={{ textAlign: "center" }}>Share your thoughts to the world!!</h1>
 
@@ -75,11 +105,13 @@ function Createblog({ userLoggedIn, setUserLoggedIn }) {
             <option value="Programming">Programming</option>
             <option value="Educational">Educational</option>
             <option value="Photography">Photography</option>
+            <option value="History">History</option>
             <option value="Art">Art</option>
             <option value="Sports">Sports</option>
+            <option value="Gaming">Gaming</option>
           </select>
         </div>
-        <button onClick={submitForm} className="btn btn-primary">Submit</button>
+        <button onClick={submitForm} className="btn btn-primary" id='submit-post'>Submit</button>
 
       </div>
     </>

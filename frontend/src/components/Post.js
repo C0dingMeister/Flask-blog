@@ -1,3 +1,5 @@
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHeart, faComment } from "@fortawesome/free-solid-svg-icons";
 import React,{useState} from "react";
 import { Stack,Image, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
@@ -7,9 +9,8 @@ export default function Post({ post,edit }) {
     const navigate = useNavigate();
     const [show, setShow] = useState(false);
 
-    const editPost = ()=> {
-        setShow(true)
-    }
+    const editPost = ()=>setShow(true)
+    
     const fullPage = () =>{
         
         navigate(`/post/${String(post.id)}`)
@@ -25,7 +26,7 @@ export default function Post({ post,edit }) {
         {edit && <Button className="btn-sm editPost" name="editPost" onClick={editPost}><i className="fa fa-edit"></i> Edit</Button> }
         <Stack direction="verticle" className="AllPosts" gap={2} onClick={fullPage}>
                 <div className="post-header">
-                    <Image src={window.location.origin+"/"+post.picture} height={"20px"} width={"20px"} style={{marginRight:"5px"}}/>
+                    <Image src={process.env.API_URL+"/"+post.picture} height={"20px"} width={"20px"} style={{marginRight:"5px"}}/>
                    <span>{post.username}</span>
                    
                 </div>
@@ -37,6 +38,8 @@ export default function Post({ post,edit }) {
                 <div>
                     <span className="PostInfo">{new Date(post.date).toLocaleDateString('en-us',{month:"short",day:"numeric"})} </span>  
                     <span className="PostInfo">{readingTime(post.article_body) > 1 ? String(readingTime(post.article_body))+" mins read" : "1 min read"} </span>
+                    <span className="PostInfo"><FontAwesomeIcon icon={faHeart}/>  {post.likes}</span>
+                    <span className="PostInfo"><FontAwesomeIcon icon={faComment}/>  {post.comments}</span>
                     <span className="Tag">{post.tag}</span>
                 </div>
             </Stack>
